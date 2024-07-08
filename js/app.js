@@ -34,6 +34,7 @@ const displayData = (phones, setLimit) => {
   }
   
   phones.forEach(phone => {
+    // console.log(phone);
     const phoneDiv = document.createElement('div');
     phoneDiv.classList.add('col');
     phoneDiv.innerHTML = `
@@ -42,6 +43,10 @@ const displayData = (phones, setLimit) => {
         <div class="card-body">
           <h5 class="card-title">${phone.brand}</h5>
           <p class="card-text">${phone.phone_name}</p>
+          <!-- Button trigger modal -->
+          <button onclick="loadPhoneDetails('${phone.slug}')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#phoneDetailModal">
+           See details
+          </button>
         </div>
       </div>
     `;
@@ -94,4 +99,39 @@ const processSearch = setLimit => {
   toggleSpninner(true);
   const searchText = document.getElementById('search-text').value;
   getData(searchText, setLimit);
+}
+
+
+/*  ------------------- Phone details --------------- */
+const loadPhoneDetails = async id => {
+  const url = ` https://openapi.programming-hero.com/api/phone/${id}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  displayPhoneDetails(data.data);
+}
+
+const displayPhoneDetails = data => {
+  console.log(data);
+  const modalTitle = document.getElementById('phoneDetailModalLabel');
+  modalTitle.innerText = data.name ;
+
+  const sensors = data.mainFeatures.sensors.map(sensor => sensor).join(', ');
+
+  const modalBody = document.getElementById('modal-body');
+  modalBody.innerHTML = `
+    <h5><b>Release:</b> ${data.
+      releaseDate ? data.releaseDate : 'Upcoming'} </h5>
+    <h6><b>Chipset:</b> ${data.mainFeatures.chipSet} </h6>
+    <h6><b>Memory:</b> ${data.mainFeatures.memory} </h6>
+    <h6><b>Storage:</b> ${data.mainFeatures.storage
+    } </h6>
+    <h6><b>Display Size:</b> ${data.mainFeatures.displaySize} </h6>
+    <h6><b>Bluetooth:</b> ${data.others.Bluetooth ? data.others.Bluetooth : ''} </h6>
+    <h6><b>GPS:</b> ${data.others.GPS ? data.others.GPS : ''} </h6>
+    <h6><b>NFC:</b> ${data.others.NFC ? data.others.NFC : ''} </h6>
+    <h6><b>Radio:</b> ${data.others.Radio ? data.others.Radio : ''} </h6>
+    <h6><b>USB:</b> ${data.others.USB ? data.others.USB : ''} </h6>
+    <h6><b>WLAN:</b> ${data.others.WLAN ? data.others.WLAN : ''} </h6>
+
+  `
 }
