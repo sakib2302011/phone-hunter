@@ -34,6 +34,15 @@ const displayData = (phones) => {
   phoneContainer.innerHTML = '';
   const errorBox = document.getElementById('error-box');
   errorBox.innerHTML = '';
+  const showAll = document.getElementById('show-all-container');
+  if(phones.length > 9){
+    phones = phones.slice(0, 9);
+    showAll.classList.remove('d-none');
+  }
+  else{
+    showAll.classList.add('d-none');
+  }
+  
   phones.forEach(phone => {
     const phoneDiv = document.createElement('div');
     phoneDiv.classList.add('col');
