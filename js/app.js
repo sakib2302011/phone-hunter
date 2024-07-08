@@ -69,6 +69,12 @@ const noResult = () => {
 document.getElementById('search-btn').addEventListener('click', function() {
   processSearch(9);
 });
+document.getElementById('search-text').addEventListener('keydown', function(event){
+  // console.log(event.key);
+  if( event.key === 'Enter'){
+    processSearch(9);
+  }
+})
 
 const toggleSpninner = isLoading => {
   const loader = document.getElementById('spinner');
